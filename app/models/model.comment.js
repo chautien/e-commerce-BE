@@ -12,6 +12,7 @@ const commentSchema = new Schema(
       type: ObjectId,
       ref: 'product',
     },
+    replyComment: [{ type: ObjectId, ref: 'replyComment' }],
   },
   { timestamps: { createdAt: 'created_at' }, collection: 'comment' }
 );

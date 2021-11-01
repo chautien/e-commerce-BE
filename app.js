@@ -2,7 +2,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const App = require('./routes/index.router');
+const App = require('./routes/router.index');
 var createError = require('http-errors');
 const database = require('./configs/database.model');
 require('dotenv').config();

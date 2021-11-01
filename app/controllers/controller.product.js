@@ -1,7 +1,8 @@
-const ProductModel = require('../models/product.model');
-const CategoryModel = require('../models/category.model');
-const CommentModel = require('../models/comment.model');
-const UserModel = require('../models/user.model');
+require('../models/model.category');
+require('../models/model.user');
+require('../models/model.replyComment');
+const ProductModel = require('../models/model.product');
+const CommentModel = require('../models/model.comment');
 
 class HomeController {
   async index(req, res) {
@@ -25,6 +26,7 @@ class HomeController {
       const product = await ProductModel.findById(id);
       const comments = await CommentModel.find({ product: id }).populate([
         { path: 'user', select: 'firstName lastName email image' },
+        { path: 'replyComment' },
       ]);
       res.status(200).json({ status: true, product, comments });
     } catch (error) {
