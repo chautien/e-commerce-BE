@@ -1,24 +1,25 @@
-const productRouter = require('./router.product');
-const authRouter = require('./router.user');
-const adminRouter = require('./router.admin');
-const auth = require('../middlewares/auth');
-const categoryRouter = require('./router.category');
-const commentRouter = require('./router.comment');
+const productRouter = require('./router.product')
+const authRouter = require('./router.user')
+const adminRouter = require('./router.admin')
+const auth = require('../middlewares/auth')
+const categoryRouter = require('./router.category')
+const commentRouter = require('./router.comment')
 
 const initialApp = (app) => {
-  // User router
-  app.use('/', authRouter);
+    // User router
+    app.use('/auth', authRouter)
 
-  // Product router
-  app.use('/api', productRouter);
-  app.use('/api/category', categoryRouter);
+    // Product router
+    app.use('/api', productRouter)
+    app.use('/api/category', categoryRouter)
 
-  // Admin router
-  app.use('/admin', auth, adminRouter);
+    // Admin router
+    // app.use('/admin', auth, adminRouter);
+    app.use('/', adminRouter)
 
-  // Comment router
+    // Comment router
 
-  app.use('/api/comment', commentRouter);
-};
+    app.use('/api/comment', commentRouter)
+}
 
-module.exports = { init: initialApp };
+module.exports = { init: initialApp }

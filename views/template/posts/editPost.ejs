@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Include head particial -->
+  <%- include('../../partials/head.ejs') %>
+  <!-- Include head particial -->
+
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+      <!-- Navbar -->
+      <%- include('../../partials/navbar') %>
+      <!-- /.navbar -->
+
+      <!-- Main Sidebar Container -->
+      <%- include('../../partials/main-sidebar.ejs') %>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <%- include('../../partials/content-header.ejs', {message: `Chỉnh sửa
+        bài viết`}) %>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+          <div class="container-fluid">
+            <!-- /.row -->
+            <form
+              action=""
+              method="POST"
+              enctype="application/x-www-form-urlencoded"
+            >
+              <div class="card-body">
+                <div class="form-group">
+                  <input type="hidden" name="id" value="<%= post._id %>" />
+                </div>
+                <div class="row">
+                  <div class="form-group col-6">
+                    <label>Chủ đề</label>
+                    <select class="form-control" name="topic" required>
+                      <% topics.forEach(topic => { %> <% if (topic._id ==
+                      post.topic) { %>
+                      <option value="<%= topic._id %>" selected>
+                        [Previous] - <%= topic.topic_name %>
+                      </option>
+                      <% }%>
+                      <option value="<%= topic._id %>">
+                        <%= topic.topic_name %>
+                      </option>
+                      <% }) %>
+                    </select>
+                  </div>
+                  <div class="form-group col-6">
+                    <label>Tác giả</label>
+                    <select class="form-control" name="author" required>
+                      <% authors.forEach(author => { %> <% if (author._id ==
+                      post.author) { %>
+                      <option value="<%= author._id %>" selected>
+                        [Previous] - <%= author.name %>
+                      </option>
+                      <% }%>
+                      <option value="<%= author._id %>">
+                        <%= author.name %>
+                      </option>
+                      <% }) %>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Tiêu đề</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="exampleInputEmail1"
+                    placeholder="Enter email"
+                    name="title"
+                    required
+                    value="<%= post.post_title %>"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Giới thiệu</label>
+                  <textarea
+                    class="form-control"
+                    placeholder="Type something ..."
+                    style="min-height: 80px"
+                    name="introduce"
+                    required
+                  >
+<%= post.post_introduce %></textarea
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="content">Nội dung</label>
+                  <textarea
+                    class="form-control"
+                    name="content"
+                    id="content"
+                    required
+                  >
+<%- post.post_content %></textarea
+                  >
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary mr-2">
+                    Cập nhật
+                  </button>
+                  <button type="reset" class="btn btn-warning">Nhập lại</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+
+      <!-- Control Sidebar -->
+      <%- include('../../partials/control-sidebar.ejs') %>
+      <!-- /.control-sidebar -->
+
+      <!-- Main Footer -->
+      <%- include('../../partials/main-footer.ejs') %>
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- REQUIRED SCRIPTS -->
+
+    <!-- jQuery -->
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script src="../plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../dist/js/adminlte.min.js"></script>
+    <script>
+      CKEDITOR.replace('content');
+    </script>
+  </body>
+</html>

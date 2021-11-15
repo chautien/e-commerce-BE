@@ -36,7 +36,7 @@ class AuthController {
         user.token = token;
         res.status(200).json({ status: true, user });
       }
-      res.status(400).json({ status: false, message: 'Invalid Credentials' });
+      // res.status(400).json({ status: false, message: 'Invalid Credentials' });
     } catch (error) {
       res.status(400).json({ status: false, error });
     }
