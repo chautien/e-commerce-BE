@@ -2,31 +2,24 @@
 <html lang="en">
   <!-- Include head particial -->
   <%- include('../../partials/head.ejs') %>
-  <!-- Include head particial -->
-
   <body class="hold-transition sidebar-mini">
     <div class="wrapper">
       <!-- Navbar -->
       <%- include('../../partials/navbar') %>../
-      <!-- /.navbar -->
-
       <!-- Main Sidebar Container -->
       <%- include('../../partials/main-sidebar.ejs') %>
-
-      <!-- Content Wrapper. Contains page content -->
+      <!-- Content Wrapper. -->
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <%- include('../../partials/content-header.ejs', {message: `Quản lý bài
         viết`}) %>
-        <!-- /.content-header -->
-
         <!-- Main content -->
         <div class="content">
           <div class="container-fluid">
             <div class="row">
               <p class="pl-2">
-                Count: <%= paginate.count %> - Page: <%= paginate.page %> / <%=
-                paginate.pages %>
+                Count: <%= paginate.totalRows %> - Page: <%= paginate.page %> /
+                <%= paginate.totalPages %>
               </p>
               <div class="col-12">
                 <div class="card">
@@ -53,8 +46,6 @@
                       </div>
                     </div>
                   </div>
-                  <!-- /.card-header -->
-
                   <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                       <thead>
@@ -71,10 +62,10 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <% posts.forEach((post, index) => { %>
+                        <% products.forEach((product, index) => { %>
                         <tr>
                           <td style="text-align: center"><%= ++index %></td>
-                          <td><%= post.topic.topic_name %></td>
+                          <td><%= product.category.name %></td>
                           <td
                             style="
                               max-width: 250px;
@@ -83,16 +74,14 @@
                               white-space: nowrap; ;
                             "
                           >
-                            <%= post.post_title %>
+                            <%= product.name %>
                           </td>
                           <td>
-                            <span class="tag tag-success"
-                              ><%= post.author.name %>
-                            </span>
+                            <span class="tag tag-success"> </span>
                           </td>
-                          <td><%= post.post_date %></td>
+                          <td></td>
                           <td style="text-align: center">
-                            <a href="/admin/post-edit?id=<%= post._id %>">
+                            <a href="/admin/post-edit?id=<%= product._id %>">
                               <i
                                 class="far fa-edit"
                                 style="cursor: pointer; color: red"
@@ -102,7 +91,7 @@
                           <td style="text-align: center">
                             <a
                               onclick="return confirm('Bạn có chắc hành động xoá, thao tác này không thể hoàn tác?')"
-                              href="/admin/post-delete?id=<%= post._id %>"
+                              href="/admin/post-delete?id=<%= product._id %>"
                             >
                               <i
                                 class="far fa-trash-alt"
@@ -115,8 +104,7 @@
                       </tbody>
                     </table>
                   </div>
-                  <!-- /.card-body -->
-                  <% if (posts.length < 0) { %>
+                  <% if (products.length < 0) { %>
                   <h6 class="p-4 text-center">
                     Chưa có bài viết.
                     <a href="/admin/post-add">Thêm bài viết.</a>
@@ -125,21 +113,25 @@
                   <div class="card-footer">
                     <% if (paginate.page - 1 > 0) { %>
                     <a
-                      href="http://localhost:3030/admin/post?page=<%= paginate.page - 1 %>&perpage=<%= paginate.perpage %>"
+                      href="/product-manager/list?page=<%= paginate.page - 1 %>&limit=<%= paginate.limit %>"
                       class="btn btn-primary btn-sm"
                     >
                       <i class="fas fa-chevron-left"></i>
                     </a>
-                    <% } %> <% for( let index = 0; index < paginate.pages;
-                    index++ ) { %>
+                    <% } %>
+                    <span>
+                      <% for( let index = 0; index < paginate.totalPages;
+                      index++ ) { %>
+                      <a
+                        href="/product-manager/list?page=<%= index + 1 %>&limit=<%= paginate.limit %>"
+                        class="pl-1 pr-1"
+                        ><%= index + 1 %>
+                      </a>
+                      <% } %>
+                    </span>
+                    <% if (paginate.page + 1 <= paginate.totalPages) { %>
                     <a
-                      href="http://localhost:3030/admin/post?page=<%= index + 1 %>&perpage=<%= paginate.perpage %>"
-                      class="pl-1 pr-1"
-                      ><%= index + 1 %>
-                    </a>
-                    <% } %> <% if (paginate.page + 1 <= paginate.pages) { %>
-                    <a
-                      href="http://localhost:3030/admin/post?page=<%= paginate.page + 1 %>&perpage=<%= paginate.perpage %>"
+                      href="/product-manager/list?page=<%= paginate.page + 1 %>&limit=<%= paginate.limit %>"
                       class="btn btn-primary btn-sm"
                     >
                       <i class="fas fa-chevron-right"></i>
@@ -147,33 +139,15 @@
                     <% } %>
                   </div>
                 </div>
-                <!-- /.card -->
               </div>
             </div>
-            <!-- /.row -->
           </div>
-          <!-- /.container-fluid -->
         </div>
-        <!-- /.content -->
       </div>
-      <!-- /.content-wrapper -->
-
-      <!-- Control Sidebar -->
-      <%- include('../../partials/control-sidebar.ejs') %>
-      <!-- /.control-sidebar -->
-
-      <!-- Main Footer -->
-      <%- include('../../partials/main-footer.ejs') %>
     </div>
-    <!-- ./wrapper -->
-
-    <!-- REQUIRED SCRIPTS -->
-
-    <!-- jQuery -->
+    <!-- Script -->
     <script src="../plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
     <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
     <script src="../dist/js/adminlte.min.js"></script>
   </body>
 </html>

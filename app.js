@@ -5,7 +5,6 @@ var logger = require('morgan');
 const App = require('./routes/router.index');
 var createError = require('http-errors');
 const database = require('./configs/database.model');
-require('dotenv').config();
 
 var app = express();
 

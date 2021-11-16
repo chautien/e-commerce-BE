@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 try {
   mongoose.connect(process.env.DB_HOST);

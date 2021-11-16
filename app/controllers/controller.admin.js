@@ -1,25 +1,48 @@
-require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/model.user');
 
-class AuthController {
+class AdminController {
+  async getHome(req, res) {
+    res.status(200).render('template/');
+  }
+  async getLogin(req, res) {
+    if (req.cookies.access_token) {
+      try {
+        const decoded = jwt.verify(
+          req.cookies.access_token,
+          process.env.TOKEN_KEY
+        );
+        if (decoded) return res.status(200).redirect('/');
+      } catch (error) {
+        return res.status(200).render('template/auth/login', {
+          message:
+            'Token đã hết hạn hoặc đã bị chỉnh sửa, vui lòng đăng nhập lại!',
+        });
+      }
+    } else {
+      res.status(200).render('template/auth/login', { message: '' });
+    }
+  }
+  async getRegister(req, res) {
+    res.status(200).render('template/auth/register');
+  }
   async login(req, res) {
     try {
       const { email, password } = req.body;
 
       if (!(email && password)) {
-        return res
-          .status(400)
-          .json({ status: false, message: 'All input is required!' });
+        return res.status(400).render('template/auth/login', {
+          message: 'Vui lòng điền đầy đủ các trường',
+        });
       }
 
       const user = await userModel.findOne({ email });
 
       if (!user) {
-        return res
-          .status(400)
-          .json({ status: false, message: 'Email is not existed!' });
+        return res.status(400).render('template/auth/login', {
+          message: 'Username hoặc password không đúng!',
+        });
       }
       if (user && (await bcrypt.compare(password, user.password))) {
         const token = jwt.sign(
@@ -35,10 +58,6 @@ class AuthController {
           { expiresIn: '2h' }
         );
         user.token = token;
-        console.log(
-          '🚀 ~ file: controller.admin.js ~ line 46 ~ AuthController ~ login ~ user',
-          user
-        );
         return res
           .cookie('access_token', token, {
             httpOnly: true,
@@ -46,11 +65,13 @@ class AuthController {
           })
           .redirect('/');
       }
-      return res
-        .status(400)
-        .json({ status: false, message: 'Invalid Credentials' });
+      return res.status(400).render('template/auth/login', {
+        message: 'Username hoặc password không đúng!',
+      });
     } catch (error) {
-      res.status(400).json({ status: false, error });
+      return res.status(400).render('template/auth/login', {
+        message: error.message,
+      });
     }
   }
   async register(req, res) {
@@ -94,8 +115,8 @@ class AuthController {
     }
   }
   async logout(req, res) {
-    return res.clearCookie('access_token').redirect('/');
+    return res.status(200).clearCookie('access_token').redirect('/');
   }
 }
 
-module.exports = new AuthController();
+module.exports = new AdminController();

@@ -27,23 +27,6 @@
       </div>
     </div>
 
-    <!-- SidebarSearch Form -->
-    <div class="form-inline">
-      <div class="input-group" data-widget="sidebar-search">
-        <input
-          class="form-control form-control-sidebar"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-        <div class="input-group-append">
-          <button class="btn btn-sidebar">
-            <i class="fas fa-search fa-fw"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul
@@ -54,25 +37,25 @@
       >
         <!-- Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library -->
-        <li class="nav-item menu-open">
+        <li class="nav-item">
           <a href="#" class="nav-link">
-            <i class="nav-icon far fa-newspaper"></i>
+            <i class="nav-icon fab fa-buffer"></i>
             <p>
-              Quản lý bài viết
+              Quản lý sản phẩm
               <i class="right fas fa-angle-left"></i>
             </p>
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/admin/post?page=1&perpage=10" class="nav-link">
+              <a href="/product-manager/list?page=1&limit=10" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Danh sách bài viết</p>
+                <p>Danh sách sản phẩm</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/admin/post-add" class="nav-link">
+              <a href="/product-manager/add" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Đăng bài</p>
+                <p>Thêm sản phẩm</p>
               </a>
             </li>
           </ul>
@@ -81,19 +64,19 @@
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-columns"></i>
             <p>
-              Quản lý chủ đề
+              Quản lý loại
               <i class="right fas fa-angle-left"></i>
             </p>
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/admin/post" class="nav-link">
+              <a href="/category-manager/list" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Danh sách chủ đề</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/admin/post-add" class="nav-link">
+              <a href="/category-manager/add" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Thêm chủ đề</p>
               </a>
@@ -104,23 +87,23 @@
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-address-card"></i>
             <p>
-              Quản lý tác giả
+              Quản lý thương hiệu
               <i class="right fas fa-angle-left"></i>
             </p>
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/admin/post" class="nav-link">
+              <a href="/brand-manager/add" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Danh sách tác giả</p>
               </a>
             </li>
-            <!-- <li class="nav-item">
-              <a href="/admin/post-add" class="nav-link">
+            <li class="nav-item">
+              <a href="/brand-manager/add" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Thêm chủ đề</p>
               </a>
-            </li> -->
+            </li>
           </ul>
         </li>
         <li class="nav-item">
@@ -133,7 +116,7 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="/admin/post" class="nav-link">
+              <a href="/comment-manager/list" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Danh sách bài viết</p>
               </a>
@@ -167,6 +150,23 @@
                 <p>Thêm chủ đề</p>
               </a>
             </li> -->
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-chart-pie"></i>
+            <p>
+              Thống kê
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/visualize/user" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Danh sách người dùng</p>
+              </a>
+            </li>
           </ul>
         </li>
       </ul>

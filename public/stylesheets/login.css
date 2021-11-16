@@ -215,3 +215,10 @@ input {
 .login-footer__tos--mod {
   color: var(--text-color-2);
 }
+
+.error-message {
+  color: #FF6591;
+  margin-top: 1rem;
+  display: inline-block;
+  font-size: 1.3rem;
+}

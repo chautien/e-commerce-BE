@@ -50,6 +50,9 @@
                 required
               />
             </div>
+            <% if (message) { %>
+            <span class="error-message"><%= message %> </span>
+            <% } %>
             <div class="login-form__raf">
               <div class="login-form__remember">
                 <input

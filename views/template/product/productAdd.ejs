@@ -2,28 +2,21 @@
 <html lang="en">
   <!-- Include head particial -->
   <%- include('../../partials/head.ejs') %>
-  <!-- Include head particial -->
-
+  <!-- Body -->
   <body class="hold-transition sidebar-mini">
     <div class="wrapper">
       <!-- Navbar -->
       <%- include('../../partials/navbar') %>
-      <!-- /.navbar -->
-
       <!-- Main Sidebar Container -->
       <%- include('../../partials/main-sidebar.ejs') %>
-
-      <!-- Content Wrapper. Contains page content -->
+      <!-- Content Wrapper -->
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <%- include('../../partials/content-header.ejs', {message: `Thêm bài
         viết`}) %>
-        <!-- /.content-header -->
-
         <!-- Main content -->
         <div class="content">
           <div class="container-fluid">
-            <!-- /.row -->
             <form
               action=""
               method="POST"
@@ -35,22 +28,12 @@
                     <label>Chủ đề</label>
                     <select class="form-control" name="topic" required>
                       <option value=""></option>
-                      <% topics.forEach(topic => { %>
-                      <option value="<%= topic._id %>">
-                        <%= topic.topic_name %>
-                      </option>
-                      <% }) %>
                     </select>
                   </div>
                   <div class="form-group col-6">
                     <label>Tác giả</label>
                     <select class="form-control" name="author" required>
                       <option value=""></option>
-                      <% authors.forEach(author => { %>
-                      <option value="<%= author._id %>">
-                        <%= author.name %>
-                      </option>
-                      <% }) %>
                     </select>
                   </div>
                 </div>
@@ -107,29 +90,13 @@
               </div>
             </form>
           </div>
-          <!-- /.container-fluid -->
         </div>
-        <!-- /.content -->
       </div>
-      <!-- /.content-wrapper -->
-
-      <!-- Control Sidebar -->
-      <%- include('../../partials/control-sidebar.ejs') %>
-      <!-- /.control-sidebar -->
-
-      <!-- Main Footer -->
-      <%- include('../../partials/main-footer.ejs') %>
     </div>
-    <!-- ./wrapper -->
-
-    <!-- REQUIRED SCRIPTS -->
-
-    <!-- jQuery -->
+    <!-- Script -->
     <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
     <script src="../plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
     <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
     <script src="../dist/js/adminlte.min.js"></script>
     <script>
       CKEDITOR.replace('content');

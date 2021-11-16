@@ -1,5 +1,6 @@
 const categoryModel = require('../models/model.category');
 const productModel = require('../models/model.product');
+
 class CategoryController {
   async index(req, res) {
     try {
