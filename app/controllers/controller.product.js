@@ -3,7 +3,8 @@ require('../models/model.user');
 require('../models/model.replyComment');
 const ProductModel = require('../models/model.product');
 const CommentModel = require('../models/model.comment');
-
+const { v4: uuidv4 } = require('uuid');
+const { SPECS_KEYS } = require('../../constant');
 class ProductController {
   async apiGetList(req, res) {
     try {
@@ -90,6 +91,50 @@ class ProductController {
   }
   async adminGetAdd(req, res) {
     res.status(200).render('template/product/productAdd');
+  }
+  async adminAddNew(req, res, next) {
+    const {
+      category,
+      brand,
+      discount,
+      flashsale,
+      flashsale_end_date,
+      name,
+      slug,
+      specs,
+      content,
+      price_option,
+      color_option,
+    } = req.body;
+
+    const { files } = req;
+
+    const option = price_option.reduce((prev, _, index, arr) => {
+      if (index % 3 === 0 || index === 0) {
+        const newObj = {
+          _id: uuidv4(),
+          price: arr[index],
+          value: arr[index + 1],
+          unit: arr[index + 2],
+        };
+        return [...prev, newObj];
+      }
+      return [...prev];
+    }, []);
+
+    const color = color_option.reduce(
+      (prev, curr) => [...prev, { _id: uuidv4(), name: curr }],
+      []
+    );
+
+    const specification = specs.reduce(
+      (prev, curr, index, arr) => [...prev, [SPECS_KEYS[index], curr]],
+      []
+    );
+    console.log(
+      '🚀 ~ file: controller.product.js ~ line 133 ~ ProductController ~ adminAddNew ~ specification',
+      specification
+    );
   }
 }
 

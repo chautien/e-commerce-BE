@@ -1,91 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- Include head particial -->
-  <%- include('../../partials/head.ejs') %>
-  <!-- Body -->
-  <body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-      <!-- Navbar -->
-      <%- include('../../partials/navbar') %>
-      <!-- Main Sidebar Container -->
-      <%- include('../../partials/main-sidebar.ejs') %>
-      <!-- Content Wrapper -->
-      <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <%- include('../../partials/content-header.ejs', {message: `Thêm bài
-        viết`}) %>
-        <!-- Main content -->
-        <div class="content">
-          <div class="container-fluid">
-            <form
-              action=""
-              method="POST"
-              enctype="application/x-www-form-urlencoded"
-            >
+<!-- Include head particial -->
+<%- include('../../partials/head.ejs') %>
+<!-- Body -->
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar') %>
+    <!-- Main Sidebar Container -->
+    <%- include('../../partials/main-sidebar.ejs') %>
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <%- include('../../partials/content-header.ejs') %>
+      <!-- Main content -->
+      <div class="content mt-3">
+        <div class="container-fluid">
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title text-uppercase">Thêm Sản phẩm</h3>
+            </div>
+            <form action="/product-manager/add" method="POST" enctype="multipart/form-data">
               <div class="card-body">
                 <div class="row">
-                  <div class="form-group col-6">
-                    <label>Chủ đề</label>
-                    <select class="form-control" name="topic" required>
+                  <div class="form-group col-3">
+                    <label>Loại sản phẩm</label>
+                    <select name="category" class="form-control">
                       <option value=""></option>
+                      <option value="category">test</option>
+                      <option value="category">test</option>
                     </select>
                   </div>
-                  <div class="form-group col-6">
-                    <label>Tác giả</label>
-                    <select class="form-control" name="author" required>
+                  <div class="form-group col-3">
+                    <label>Thương hiệu</label>
+                    <select name="brand" class="form-control">
                       <option value=""></option>
+                      <option value="brand">test</option>
+                      <option value="brand">test</option>
                     </select>
+                  </div>
+                  <div class="form-group col-3">
+                    <label>Giảm giá (%)</label>
+                    <input type="number" name="discount" value="0" min="0" max="100" class="form-control" />
+                  </div>
+                  <div class="form-group col-3">
+                    <label>Flash sale</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <input type="checkbox" name="flashsale" />
+                        </span>
+                      </div>
+                      <input type="text" class="form-control" name="flashsale_end_date" />
+                    </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="form-group col-6">
-                    <label for="exampleInputEmail1">Tiêu đề</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="exampleInputEmail1"
-                      placeholder="Enter email"
-                      name="title"
-                      required
-                    />
+                    <label for="name">Tên sản phẩm</label>
+                    <input type="text" id="name" name="name" class="form-control" />
                   </div>
                   <div class="form-group col-6">
-                    <label for="exampleInputEmail1">Thumbnail</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="exampleInputEmail1"
-                      placeholder="Enter email"
-                      name="thumbnail"
-                      required
-                    />
+                    <label for="slug">Slug</label>
+                    <input type="text" id="slug" name="slug" class="form-control" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-6">
+                    <label for="product-image">Hình ảnh sản phẩm</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" multiple accept="image/*" required name="product-image" id="product-image" class="custom-file-input">
+                        <label class="custom-file-label" for="product-image">Thêm hình ảnh</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-3">
+                    <label for="banner">Ảnh banner</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" name="banner" id="banner" accept="image/*" class="custom-file-input" />
+                        <label for="banner" class="custom-file-label">Thêm hình ảnh</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-3">
+                    <label for="thumbnail">Ảnh thumbnail</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" accept="image/*" name="thumbnail" required id="thumbnail" class="custom-file-input" />
+                        <label for="thumbnail" class="custom-file-label">Thêm hình ảnh</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <label class="card-heading pt-2">Thông số sản phẩm</label>
+                    <div class="row">
+                      <div class="form-group col-3">
+                        <label>Màn hình</label>
+                        <input type="text" name="specs" class="form-control" />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>Hệ điều hành</label>
+                        <input type="text" name="specs" class="form-control" />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>Camera sau</label>
+                        <input type="text" name="specs" class="form-control" />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>Camera Trước</label>
+                        <input type="text" name="specs" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-3">
+                        <label>Chip</label>
+                        <input type="text" name="specs" class="form-control" />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>RAM</label>
+                        <input type="text" name="specs" class="form-control" />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>Sim</label>
+                        <input type="text" name="specs" class="form-control" />
+                      </div>
+                      <div class="form-group col-3">
+                        <label>Pin, Sạc</label>
+                        <input type="text" name="specs" class="form-control" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <h4 class="heading">Giá bán</h4>
+                    <div class="row">
+                      <div class="col-4">
+                        <h4>Option 1</h4>
+                        <div class="form-group">
+                          <label>Giá</label>
+                          <input type="text" name="price_option" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                          <label>Dung lượng</label>
+                          <input type="text" name="price_option" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                          <label>Đơn vị đo</label>
+                          <input type="text" name="price_option" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <h4>Option 1</h4>
+                        <div class="form-group">
+                          <label>Giá</label>
+                          <input type="text" name="price_option" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                          <label>Dung lượng</label>
+                          <input type="text" name="price_option" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                          <label>Đơn vị đo</label>
+                          <input type="text" name="price_option" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <h4>Option 1</h4>
+                        <div class="form-group">
+                          <label>Giá</label>
+                          <input type="text" name="price_option" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                          <label>Dung lượng</label>
+                          <input type="text" name="price_option" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                          <label>Đơn vị đo</label>
+                          <input type="text" name="price_option" class="form-control" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <h4 class="heading">Màu sắc</h4>
+                    <div class="row">
+                      <div class="col-4">
+                        <h4>Option 1</h4>
+                        <div class="form-group">
+                          <label>Màu</label>
+                          <input type="text" name="color_option" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <h4>Option 2</h4>
+                        <div class="form-group">
+                          <label>Màu</label>
+                          <input type="text" name="color_option" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <h4>Option 3</h4>
+                        <div class="form-group">
+                          <label>Màu</label>
+                          <input type="text" name="color_option" class="form-control" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Giới thiệu</label>
-                  <textarea
-                    class="form-control"
-                    placeholder="Type something ..."
-                    style="min-height: 80px"
-                    name="introduce"
-                    required
-                  ></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="content">Nội dung</label>
-                  <textarea
-                    class="form-control"
-                    name="content"
-                    id="content"
-                    rows="5"
-                    required
-                  ></textarea>
+                  <label for="content">Mô tả</label>
+                  <textarea class="form-control" name="content" id="content" rows="5"></textarea>
                 </div>
                 <div class="form-group">
                   <button type="submit" class="btn btn-primary mr-2">
-                    Đăng bài
+                    Thêm sản phẩm
                   </button>
-                  <button type="reset" class="btn btn-warning">Nhập lại</button>
+                  <button type="reset" class="btn btn-warning">
+                    Nhập lại
+                  </button>
                 </div>
               </div>
             </form>
@@ -93,13 +232,23 @@
         </div>
       </div>
     </div>
-    <!-- Script -->
-    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
-    <script src="../plugins/jquery/jquery.min.js"></script>
-    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../dist/js/adminlte.min.js"></script>
-    <script>
-      CKEDITOR.replace('content');
-    </script>
-  </body>
+  </div>
+  <!-- Script -->
+  <script src="../plugins/jquery/jquery.min.js"></script>
+  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/js/adminlte.min.js"></script>
+  <script src="../plugins/moment/moment-with-locales.min.js"></script>
+  <script src="../plugins/daterangepicker/daterangepicker.js"></script>
+  <script src="../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+  <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+  <script>
+    $(function() {
+      bsCustomFileInput.init();
+    });
+  </script>
+  <script>
+    CKEDITOR.replace('content');
+  </script>
+</body>
+
 </html>
