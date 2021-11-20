@@ -232,6 +232,9 @@
         </div>
       </div>
     </div>
+    <% if (message) { %>
+    <div class="message-popup" id="message-popup"><%= message %></div>
+    <% } %>
   </div>
   <!-- Script -->
   <script src="../plugins/jquery/jquery.min.js"></script>
@@ -245,6 +248,13 @@
     $(function() {
       bsCustomFileInput.init();
     });
+  </script>
+  <script>
+    window.addEventListener('DOMContentLoaded', (e) => {
+      setTimeout(() => {
+        document.querySelector('#message-popup').remove()
+      }, 3000);
+    })
   </script>
   <script>
     CKEDITOR.replace('content');

@@ -5,6 +5,7 @@ const ProductModel = require('../models/model.product');
 const CommentModel = require('../models/model.comment');
 const { v4: uuidv4 } = require('uuid');
 const { SPECS_KEYS } = require('../../constant');
+const { slugify } = require('../../utils/slugify');
 class ProductController {
   async apiGetList(req, res) {
     try {
@@ -90,10 +91,10 @@ class ProductController {
     }
   }
   async adminGetAdd(req, res) {
-    res.status(200).render('template/product/productAdd');
+    res.status(200).render('template/product/productAdd', { message: '' });
   }
   async adminAddNew(req, res, next) {
-    const {
+    let {
       category,
       brand,
       discount,
@@ -106,8 +107,16 @@ class ProductController {
       price_option,
       color_option,
     } = req.body;
-
     const { files } = req;
+
+    if (!slug) {
+      slug = slugify(name);
+    }
+    if (flashsale === 'on') {
+      flashsale = true;
+    } else {
+      flashsale = false;
+    }
 
     const option = price_option.reduce((prev, _, index, arr) => {
       if (index % 3 === 0 || index === 0) {
@@ -121,20 +130,50 @@ class ProductController {
       }
       return [...prev];
     }, []);
-
     const color = color_option.reduce(
       (prev, curr) => [...prev, { _id: uuidv4(), name: curr }],
       []
     );
-
     const specification = specs.reduce(
       (prev, curr, index, arr) => [...prev, [SPECS_KEYS[index], curr]],
       []
     );
-    console.log(
-      '🚀 ~ file: controller.product.js ~ line 133 ~ ProductController ~ adminAddNew ~ specification',
-      specification
-    );
+    const thumbnail =
+      req.files['thumbnail'][0].destination.replace('storage', '') +
+      '/' +
+      req.files['thumbnail'][0].filename;
+    const banner_image =
+      req.files['banner'][0].destination.replace('storage', '') +
+      '/' +
+      req.files['banner'][0].filename;
+    const product_image = req.files['product-image'].map((entity, index) => {
+      return entity.destination.replace('storage', '') + '/' + entity.filename;
+    });
+
+    const product = new ProductModel({
+      name,
+      option,
+      color,
+      discount,
+      flash_sale: flashsale,
+      thumbnail,
+      product_image,
+      banner_image,
+      specification,
+      article: content,
+      slug,
+    });
+
+    try {
+      await ProductModel.create(product);
+      res.status(200).render('template/product/productAdd', {
+        message: 'Thêm sản phẩm thành công',
+      });
+    } catch (error) {
+      res.status(500).render('template/product/productAdd', {
+        message: 'Thêm sản phẩm thất bại',
+      });
+    }
   }
 }
 
