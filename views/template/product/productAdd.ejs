@@ -21,23 +21,33 @@
             <div class="card-header">
               <h3 class="card-title text-uppercase">Thêm Sản phẩm</h3>
             </div>
-            <form action="/product-manager/add" method="POST" enctype="multipart/form-data">
+            <form action="/product-manager/add" method="POST" id="product-form" enctype="multipart/form-data">
               <div class="card-body">
                 <div class="row">
                   <div class="form-group col-3">
                     <label>Loại sản phẩm</label>
-                    <select name="category" class="form-control">
+                    <select name="category" required class="form-control">
                       <option value=""></option>
-                      <option value="category">test</option>
-                      <option value="category">test</option>
+                      <% if (category.length > 0) { %>
+                      <% category.forEach(element => { %>
+                      <option value="<%= element._id %>">
+                        <%= element.name %>
+                      </option>
+                      <% }) %>
+                      <% } %>
                     </select>
                   </div>
                   <div class="form-group col-3">
                     <label>Thương hiệu</label>
-                    <select name="brand" class="form-control">
+                    <select name="brand" required class="form-control">
                       <option value=""></option>
-                      <option value="brand">test</option>
-                      <option value="brand">test</option>
+                      <% if (brand.length > 0) { %>
+                      <% brand.forEach(element => { %>
+                      <option value="<%= element._id %>">
+                        <%= element.name %>
+                      </option>
+                      <% }) %>
+                      <% } %>
                     </select>
                   </div>
                   <div class="form-group col-3">
@@ -67,7 +77,11 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="form-group col-6">
+                  <div class="form-group col-1">
+                    <label for="amount">Số lượng</label>
+                    <input type="number" name="amount" id="amount" value="1" min="1" class="form-control">
+                  </div>
+                  <div class="form-group col-5">
                     <label for="product-image">Hình ảnh sản phẩm</label>
                     <div class="input-group">
                       <div class="custom-file">
@@ -144,44 +158,32 @@
                         <h4>Option 1</h4>
                         <div class="form-group">
                           <label>Giá</label>
-                          <input type="text" name="price_option" class="form-control" />
+                          <input type="text" name="price_option" class="form-control price" />
                         </div>
                         <div class="form-group">
                           <label>Dung lượng</label>
-                          <input type="text" name="price_option" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                          <label>Đơn vị đo</label>
                           <input type="text" name="price_option" class="form-control" />
                         </div>
                       </div>
                       <div class="col-4">
-                        <h4>Option 1</h4>
+                        <h4>Option 2</h4>
                         <div class="form-group">
                           <label>Giá</label>
-                          <input type="text" name="price_option" class="form-control" />
+                          <input type="text" name="price_option" class="form-control price" />
                         </div>
                         <div class="form-group">
                           <label>Dung lượng</label>
-                          <input type="text" name="price_option" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                          <label>Đơn vị đo</label>
                           <input type="text" name="price_option" class="form-control" />
                         </div>
                       </div>
                       <div class="col-4">
-                        <h4>Option 1</h4>
+                        <h4>Option 3</h4>
                         <div class="form-group">
                           <label>Giá</label>
-                          <input type="text" name="price_option" class="form-control" />
+                          <input type="text" name="price_option" class="form-control price" />
                         </div>
                         <div class="form-group">
                           <label>Dung lượng</label>
-                          <input type="text" name="price_option" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                          <label>Đơn vị đo</label>
                           <input type="text" name="price_option" class="form-control" />
                         </div>
                       </div>
@@ -250,11 +252,46 @@
     });
   </script>
   <script>
-    window.addEventListener('DOMContentLoaded', (e) => {
-      setTimeout(() => {
-        document.querySelector('#message-popup').remove()
-      }, 3000);
+    const slugify = (string) => {
+      const a =
+        'àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;';
+      const b =
+        'aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------';
+      const p = new RegExp(a.split('').join('|'), 'g');
+      return string
+        .toString()
+        .toLowerCase()
+        .replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a')
+        .replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e')
+        .replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i')
+        .replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o')
+        .replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u')
+        .replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y')
+        .replace(/đ/gi, 'd')
+        .replace(/\s+/g, '-')
+        .replace(p, (c) => b.charAt(a.indexOf(c)))
+        .replace(/&/g, '-and-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+    };
+    document.querySelectorAll('.price')?.forEach(el => {
+      el.addEventListener('keyup', e => {
+        if (!e.target.value) {
+          return e.target.value = '';
+        }
+        let n = parseInt(e.target.value.replace(/\D/g, ''), 10);
+        e.target.value = n.toLocaleString();
+      })
+    });
+    document.querySelector('#name')?.addEventListener('keyup', e => {
+      document.querySelector('#slug').value = slugify(e.target.value)
     })
+    document.querySelector('#product-form')?.reset();
+    setTimeout(() => {
+      document.querySelector('#message-popup')?.remove()
+    }, 3000);
   </script>
   <script>
     CKEDITOR.replace('content');

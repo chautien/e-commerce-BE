@@ -1,15 +1,15 @@
 const express = require('express');
 const productController = require('../../app/controllers/controller.product');
 const router = express.Router();
-const upload = require('../../utils/storage');
+const { uploadS3 } = require('../../middlewares/upload-aws-s3');
 
 router.get('/list', productController.adminGetList);
 router.get('/add', productController.adminGetAdd);
 router.post(
   '/add',
-  upload.fields([
-    { name: 'thumbnail' },
-    { name: 'banner' },
+  uploadS3.fields([
+    { name: 'thumbnail', maxCount: 1 },
+    { name: 'banner', maxCount: 1 },
     { name: 'product-image' },
   ]),
   productController.adminAddNew

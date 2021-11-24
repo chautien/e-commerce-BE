@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/model.user');
+const { deleteS3 } = require('../../middlewares/delete-aws-s3');
 
 class AdminController {
   async getHome(req, res) {
@@ -116,6 +117,15 @@ class AdminController {
   }
   async logout(req, res) {
     return res.status(200).clearCookie('access_token').redirect('/');
+  }
+  async deleteFile(req, res) {
+    const { params } = req;
+    try {
+      const deleteResponse = await deleteS3([params]);
+      res.status(200).json(deleteResponse);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
   }
 }
 

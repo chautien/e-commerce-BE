@@ -5,6 +5,7 @@ const logger = require('morgan');
 const App = require('./routes/router.index');
 const createError = require('http-errors');
 const database = require('./configs/database.model');
+const nocache = require('nocache');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public/')));
 app.use(express.static(path.join(__dirname, 'storage/')));
+app.use(nocache());
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   next();

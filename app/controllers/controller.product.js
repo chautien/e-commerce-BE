@@ -1,28 +1,36 @@
-require('../models/model.category');
 require('../models/model.user');
 require('../models/model.replyComment');
+const CategoryModel = require('../models/model.category');
 const ProductModel = require('../models/model.product');
 const CommentModel = require('../models/model.comment');
-const { v4: uuidv4 } = require('uuid');
+const BrandModal = require('../models/model.brand');
 const { SPECS_KEYS } = require('../../constant');
 const { slugify } = require('../../utils/slugify');
+const { getS3ResponsenEntity } = require('../../utils/getS3ReponseEntity');
 class ProductController {
   async apiGetList(req, res) {
     try {
-      const { page = 1, limit = 10 } = req.query;
+      const { page = 1, limit = 10, category, sort } = req.query;
 
-      const totalRows = await ProductModel.count();
+      const totalRows = category
+        ? await ProductModel.find({ ...(category && { category }) }).count()
+        : await ProductModel.count();
       const totalPages = Math.ceil(totalRows / limit);
 
-      const products = await ProductModel.find()
+      const filter = {
+        ...(category && { category }),
+      };
+      console.log(sort && { view: sort });
+      const products = await ProductModel.find(filter)
         .populate([
           {
             path: 'category',
-            select: 'name',
           },
         ])
         .skip(Number.parseInt(page * limit - limit))
-        .limit(Number.parseInt(limit));
+        .limit(Number.parseInt(limit))
+        .sort({ ...(sort && { view: sort }) });
+
       if (products.length > 0) {
         return res
           .status(200)
@@ -63,22 +71,21 @@ class ProductController {
         .populate([
           {
             path: 'category',
-            select: 'name',
           },
         ])
         .skip(Number.parseInt(page * limit - limit))
         .limit(Number.parseInt(limit));
       if (products.length > 0) {
-        return res.status(200).render('template/product/productList', {
-          paginate: {
-            totalRows: Number.parseInt(totalRows),
-            page: Number.parseInt(page),
-            limit: Number.parseInt(limit),
-            totalPages: Number.parseInt(totalPages),
-          },
-          products,
-          message: '',
-        });
+        // return res.status(200).render('template/product/productList', {
+        //   paginate: {
+        //     totalRows: Number.parseInt(totalRows),
+        //     page: Number.parseInt(page),
+        //     limit: Number.parseInt(limit),
+        //     totalPages: Number.parseInt(totalPages),
+        //   },
+        //   products,
+        //   message: '',
+        // });
       } else {
         return res.status(400).render('template/product/productList', {
           paginate: { totalRows, page, limit, totalPages },
@@ -91,7 +98,12 @@ class ProductController {
     }
   }
   async adminGetAdd(req, res) {
-    res.status(200).render('template/product/productAdd', { message: '' });
+    const category = await CategoryModel.find();
+    const brand = await BrandModal.find();
+
+    res
+      .status(200)
+      .render('template/product/productAdd', { message: '', category, brand });
   }
   async adminAddNew(req, res, next) {
     let {
@@ -106,8 +118,8 @@ class ProductController {
       content,
       price_option,
       color_option,
+      amount,
     } = req.body;
-    const { files } = req;
 
     if (!slug) {
       slug = slugify(name);
@@ -119,36 +131,34 @@ class ProductController {
     }
 
     const option = price_option.reduce((prev, _, index, arr) => {
-      if (index % 3 === 0 || index === 0) {
+      if (index % 2 === 0 || index === 0) {
+        if (!(arr[index] || arr[index + 1])) {
+          return prev;
+        }
         const newObj = {
-          _id: uuidv4(),
-          price: arr[index],
+          price: parseInt(arr[index].split(',').join('')),
           value: arr[index + 1],
-          unit: arr[index + 2],
         };
         return [...prev, newObj];
       }
-      return [...prev];
+      return prev;
     }, []);
-    const color = color_option.reduce(
-      (prev, curr) => [...prev, { _id: uuidv4(), name: curr }],
-      []
+
+    const color = color_option.reduce((prev, curr) => {
+      if (curr) {
+        return [...prev, { name: curr }];
+      }
+      return prev;
+    }, []);
+
+    const specification = specs.reduce((prev, curr, index, arr) => {
+      return [...prev, [SPECS_KEYS[index], curr]];
+    }, []);
+    const thumbnail = getS3ResponsenEntity({ ...req.files['thumbnail'][0] });
+    const banner_image = getS3ResponsenEntity({ ...req.files['banner'][0] });
+    const product_image = req.files['product-image'].map((entity) =>
+      getS3ResponsenEntity(entity)
     );
-    const specification = specs.reduce(
-      (prev, curr, index, arr) => [...prev, [SPECS_KEYS[index], curr]],
-      []
-    );
-    const thumbnail =
-      req.files['thumbnail'][0].destination.replace('storage', '') +
-      '/' +
-      req.files['thumbnail'][0].filename;
-    const banner_image =
-      req.files['banner'][0].destination.replace('storage', '') +
-      '/' +
-      req.files['banner'][0].filename;
-    const product_image = req.files['product-image'].map((entity, index) => {
-      return entity.destination.replace('storage', '') + '/' + entity.filename;
-    });
 
     const product = new ProductModel({
       name,
@@ -162,16 +172,24 @@ class ProductController {
       specification,
       article: content,
       slug,
+      amount,
     });
+
+    const categoryData = await CategoryModel.find();
+    const brandData = await BrandModal.find();
 
     try {
       await ProductModel.create(product);
-      res.status(200).render('template/product/productAdd', {
+      return res.status(200).render('template/product/productAdd', {
         message: 'Thêm sản phẩm thành công',
+        category: categoryData,
+        brand: brandData,
       });
     } catch (error) {
-      res.status(500).render('template/product/productAdd', {
+      return res.status(505).render('template/product/productAdd', {
         message: 'Thêm sản phẩm thất bại',
+        category: categoryData,
+        brand: brandData,
       });
     }
   }
