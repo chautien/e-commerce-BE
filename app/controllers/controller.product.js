@@ -26,6 +26,9 @@ class ProductController {
           {
             path: 'category',
           },
+          {
+            path: 'brand',
+          },
         ])
         .skip(Number.parseInt(page * limit - limit))
         .limit(Number.parseInt(limit))
@@ -72,20 +75,24 @@ class ProductController {
           {
             path: 'category',
           },
+          {
+            path: 'brand',
+          },
         ])
         .skip(Number.parseInt(page * limit - limit))
         .limit(Number.parseInt(limit));
+
       if (products.length > 0) {
-        // return res.status(200).render('template/product/productList', {
-        //   paginate: {
-        //     totalRows: Number.parseInt(totalRows),
-        //     page: Number.parseInt(page),
-        //     limit: Number.parseInt(limit),
-        //     totalPages: Number.parseInt(totalPages),
-        //   },
-        //   products,
-        //   message: '',
-        // });
+        return res.status(200).render('template/product/productList', {
+          paginate: {
+            totalRows: Number.parseInt(totalRows),
+            page: Number.parseInt(page),
+            limit: Number.parseInt(limit),
+            totalPages: Number.parseInt(totalPages),
+          },
+          products,
+          message: '',
+        });
       } else {
         return res.status(400).render('template/product/productList', {
           paginate: { totalRows, page, limit, totalPages },
@@ -105,7 +112,7 @@ class ProductController {
       .status(200)
       .render('template/product/productAdd', { message: '', category, brand });
   }
-  async adminAddNew(req, res, next) {
+  async adminAddNew(req, res) {
     let {
       category,
       brand,
@@ -166,6 +173,7 @@ class ProductController {
       color,
       discount,
       flash_sale: flashsale,
+      flashsale_end_date: Date.now(),
       thumbnail,
       product_image,
       banner_image,
@@ -173,6 +181,8 @@ class ProductController {
       article: content,
       slug,
       amount,
+      category,
+      brand,
     });
 
     const categoryData = await CategoryModel.find();
@@ -192,6 +202,110 @@ class ProductController {
         brand: brandData,
       });
     }
+  }
+  async adminDeleteOne(req, res) {
+    const { id } = req.params;
+    try {
+      await ProductModel.deleteOne({ _id: id });
+      res.redirect('/product-manager/list');
+    } catch (error) {
+      res.redirect('/product-manager/list');
+    }
+  }
+  async adminGetUpdate(req, res) {
+    const { id } = req.query;
+    if (!id) {
+      return res.redirect('/product-manager/list');
+    }
+    try {
+      const product = await ProductModel.findById(id).populate([
+        { path: 'category' },
+        { path: 'brand' },
+      ]);
+      console.log(
+        '🚀 ~ file: controller.product.js ~ line 216 ~ ProductController ~ adminGetUpdate ~ product',
+        product
+      );
+      const brand = await BrandModal.find();
+      const category = await CategoryModel.find();
+      res.status(200).render('template/product/productEdit', {
+        message: '',
+        product,
+        brand,
+        category,
+      });
+    } catch (error) {
+      res.status(300).redirect('product-manager/list');
+    }
+  }
+  async adminPutUpdate(req, res) {
+    let {
+      category,
+      brand,
+      discount,
+      flashsale,
+      flashsale_end_date,
+      name,
+      slug,
+      specs,
+      content,
+      price_option,
+      color_option,
+      amount,
+    } = req.body;
+
+    if (flashsale === 'on') {
+      flashsale = true;
+    } else {
+      flashsale = false;
+    }
+    // const option = price_option.reduce((prev, _, index, arr) => {
+    //   if (index % 2 === 0 || index === 0) {
+    //     if (!(arr[index] || arr[index + 1])) {
+    //       return prev;
+    //     }
+    //     const newObj = {
+    //       price: parseInt(arr[index].split(',').join('')),
+    //       value: arr[index + 1],
+    //     };
+    //     return [...prev, newObj];
+    //   }
+    //   return prev;
+    // }, []);
+
+    // const color = color_option.reduce((prev, curr) => {
+    //   if (curr) {
+    //     return [...prev, { name: curr }];
+    //   }
+    //   return prev;
+    // }, []);
+
+    // const specification = specs.reduce((prev, curr, index, arr) => {
+    //   return [...prev, [SPECS_KEYS[index], curr]];
+    // }, []);
+    // const thumbnail =
+    //   getS3ResponsenEntity({ ...req.files['thumbnail'][0] }) || null;
+    // const banner_image =
+    //   getS3ResponsenEntity({ ...req.files['banner'][0] }) || null;
+    // const product_image =
+    //   req.files['product-image']?.map((entity) =>
+    //     getS3ResponsenEntity(entity)
+    //   ) || null;
+
+    const product = new ProductModel({
+      name,
+      discount,
+      flash_sale: flashsale,
+      flashsale_end_date: Date.now(),
+
+      article: content,
+      slug,
+      amount,
+      category,
+      brand,
+    });
+
+    res.json(product);
   }
 }
 

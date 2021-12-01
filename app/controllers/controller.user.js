@@ -7,7 +7,7 @@ class AuthController {
     try {
       const { email, password } = req.body;
       if (!(email && password)) {
-        res
+        return res
           .status(400)
           .json({ status: false, message: 'All input is required!' });
       }
@@ -15,7 +15,7 @@ class AuthController {
       const user = await userModel.findOne({ email });
 
       if (!user) {
-        res
+        return res
           .status(400)
           .json({ status: false, message: 'Email is not existed!' });
       }
@@ -33,11 +33,11 @@ class AuthController {
           { expiresIn: '2h' }
         );
         user.token = token;
-        res.status(200).json({ status: true, user });
+        return res.status(200).json({ status: true, user });
       }
       // res.status(400).json({ status: false, message: 'Invalid Credentials' });
     } catch (error) {
-      res.status(400).json({ status: false, error });
+      return res.status(400).json({ status: false, error });
     }
   }
   async register(req, res) {
@@ -45,11 +45,11 @@ class AuthController {
       const { firstName, lastName, email, password, role, image } = req.body;
 
       if (!(firstName && lastName && email && password && role && image)) {
-        res.status(400).json({ message: 'All input is required!' });
+        return res.status(400).json({ message: 'All input is required!' });
       }
       const existUser = await userModel.findOne({ email });
       if (existUser) {
-        res.status(400).json({ message: 'User email already exist!' });
+        return res.status(400).json({ message: 'User email already exist!' });
       }
 
       const encryptedPassword = await bcrypt.hash(password, 10);
@@ -75,9 +75,9 @@ class AuthController {
         { expiresIn: '2h' }
       );
       user.token = token;
-      res.status(200).json({ status: true, user });
+      return res.status(200).json({ status: true, user });
     } catch (error) {
-      res.status(400).json({ status: false, error });
+      return res.status(400).json({ status: false, error });
     }
   }
 }

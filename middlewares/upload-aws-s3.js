@@ -11,10 +11,10 @@ const uploadS3 = multer({
     s3: s3,
     bucket: process.env.BUTKET_AWS_S3,
     acl: 'public-read',
-    metadata: function (req, file, cb) {
+    metadata: function (req, file, cb, next) {
       cb(null, { fieldName: file.fieldname });
     },
-    key: function (req, file, cb) {
+    key: function (req, file, cb, next) {
       cb(null, `${uuidv4()}-${file.originalname}`);
     },
   }),
