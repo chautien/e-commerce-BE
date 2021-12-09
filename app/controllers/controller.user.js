@@ -19,6 +19,7 @@ class AuthController {
           .status(400)
           .json({ status: false, message: 'Email is not existed!' });
       }
+      console.log(password, user.password);
       if (user && (await bcrypt.compare(password, user.password))) {
         const token = jwt.sign(
           {
@@ -35,7 +36,7 @@ class AuthController {
         user.token = token;
         return res.status(200).json({ status: true, user });
       }
-      // res.status(400).json({ status: false, message: 'Invalid Credentials' });
+      res.status(400).json({ status: false, message: 'Invalid Credentials' });
     } catch (error) {
       return res.status(400).json({ status: false, error });
     }

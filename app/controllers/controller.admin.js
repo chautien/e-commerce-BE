@@ -45,6 +45,7 @@ class AdminController {
           message: 'Username hoặc password không đúng!',
         });
       }
+      console.log(password, user.password);
       if (user && (await bcrypt.compare(password, user.password))) {
         const token = jwt.sign(
           {
