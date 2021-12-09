@@ -4,6 +4,8 @@ const commentRouter = require('./api/router.comment');
 const userRouter = require('./api/router.user');
 const adminRootRouter = require('./admin/router.admin');
 const adminProductRouter = require('./admin/route.product');
+const orderRouter = require('./api/router.order');
+const orderAdminRouter = require('./admin/router.order');
 
 const initialApp = (app) => {
   // *** Site Route ***
@@ -19,6 +21,10 @@ const initialApp = (app) => {
   // *** Admin Route ***
   app.use('/', adminRootRouter);
   app.use('/product-manager', adminProductRouter);
+
+  // Order
+  app.use('/api/order', orderRouter);
+  app.use('/order', orderAdminRouter);
 };
 
 module.exports = { init: initialApp };
