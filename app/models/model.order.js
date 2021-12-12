@@ -9,7 +9,7 @@ const orderSchema = new Schema(
     node: String,
     cart: Array,
     priceTotal: Number,
-    status: {type: String, default: "Chưa giao"}
+    status: { type: String, default: 'Đang xác nhận' },
   },
   { timestamps: true, collection: 'order' }
 );

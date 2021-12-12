@@ -6,6 +6,8 @@ const adminRootRouter = require('./admin/router.admin');
 const adminProductRouter = require('./admin/route.product');
 const orderRouter = require('./api/router.order');
 const orderAdminRouter = require('./admin/router.order');
+const adminCategoryRouter = require('./admin/route.category');
+const adminBrandRouter = require('./admin/route.brand');
 
 const initialApp = (app) => {
   // *** Site Route ***
@@ -20,9 +22,17 @@ const initialApp = (app) => {
 
   // *** Admin Route ***
   app.use('/', adminRootRouter);
+
+  // Dashboard Product
   app.use('/product-manager', adminProductRouter);
 
-  // Order
+  // Dashboard category
+  app.use('/category-manager', adminCategoryRouter);
+
+  // Dashboard brand
+  app.use('/brand-manager', adminBrandRouter);
+
+  // Dashboard Order
   app.use('/api/order', orderRouter);
   app.use('/order', orderAdminRouter);
 };

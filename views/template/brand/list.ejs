@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Include head particial -->
+<%- include('../../partials/head.ejs') %>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../../partials/navbar') %>../
+    <!-- Main Sidebar Container -->
+    <%- include('../../partials/main-sidebar.ejs') %>
+    <!-- Content Wrapper. -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <%- include('../../partials/content-header.ejs', {message: `Quản lý thương hiệu`}) %>
+      <!-- Main content -->
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Danh sách thương hiệu</h3>
+
+                  <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px">
+                      <input type="text" name="table_search" class="form-control float-right" placeholder="Search" />
+
+                      <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                          <i class="fas fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover text-nowrap">
+                    <thead>
+                      <tr>
+                        <th style="width: 10px">STT</th>
+                        <th>Tên thương hiệu</th>
+                        <th>Slug</th>
+                        <th>Hình ảnh</th>
+                        <th style="text-align: center" class="pl-0 pr-0">
+                          Sửa
+                        </th>
+                        <th style="text-align: center" class="pl-0">Xoá</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% brands.forEach((el, index) => { %>
+                      <tr>
+                        <td style="vertical-align: middle;"><%= ++index %></td>
+                        <td style="vertical-align: middle;"><%= el.name %></td>
+                        <td style="vertical-align: middle;"><%= el.slug %></td>
+                        <td style="vertical-align: middle;"><img style="width: 50px; height: 50px; object-fit: contain;" src="<%= el.image %>" alt="<%= el.name %>"></td>
+                        <td style="text-align: center; vertical-align: middle;">
+                          <a href="/brand-manager/edit?id=<%= el._id %>">
+                            <i class="far fa-edit" style="cursor: pointer; color: red"></i>
+                          </a>
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                          <a onclick="return confirm('Bạn có chắc hành động xoá, thao tác này không thể hoàn tác?')" href="/brand-manager/delete/<%= el._id %>">
+                            <i class="far fa-trash-alt" style="cursor: pointer; color: rgb(87, 218, 0)"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+                <% if (brands.length < 0) { %>
+                <h6 class="p-4 text-center">
+                  Chưa có thương hiệu.
+                  <a href="/product-manager/add">Thêm thương hiệu.</a>
+                </h6>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Script -->
+  <script src="../plugins/jquery/jquery.min.js"></script>
+  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/js/adminlte.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    document.querySelectorAll('.createTime')?.forEach((el) => {
+      el.textContent = moment(el.dataset.timeCreate).format('DD/MM/YYYY');
+    });
+  </script>
+</body>
+
+</html>

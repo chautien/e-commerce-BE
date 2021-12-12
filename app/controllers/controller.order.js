@@ -13,6 +13,7 @@ class OrderController {
     await orderModel.create(data);
     return res.status(200).json({
       status: 200,
+      // mes: ' success'
     });
   };
 
@@ -27,7 +28,18 @@ class OrderController {
 
   update = async (req, res) => {
     const update = {
-      status: 'Đơn đã giao',
+      status: 'Đang giao',
+    };
+    const { id } = req.params;
+    const query = {
+      _id: id,
+    };
+    await orderModel.updateOne(query, update);
+    return res.redirect('/order');
+  };
+  updateNext = async (req, res) => {
+    const update = {
+      status: 'Đã giao',
     };
     const { id } = req.params;
     const query = {

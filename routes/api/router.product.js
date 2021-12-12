@@ -3,5 +3,6 @@ const productController = require('../../app/controllers/controller.product');
 
 Router.get('/product', productController.apiGetList);
 Router.get('/product/:id', productController.apiGetOne);
+Router.get('/product/update-view/:id', productController.apiViewUpdate);
 
 module.exports = Router;

@@ -3,7 +3,6 @@ const { ObjectId } = Schema.Types;
 
 const categorySchema = new Schema(
   {
-    _id: { type: ObjectId },
     name: String,
     slug: String,
   },

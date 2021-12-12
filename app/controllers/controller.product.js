@@ -8,6 +8,7 @@ const { SPECS_KEYS } = require('../../constant');
 const { slugify } = require('../../utils/slugify');
 const { getS3ResponsenEntity } = require('../../utils/getS3ReponseEntity');
 class ProductController {
+  // API route
   async apiGetList(req, res) {
     try {
       const { page = 1, limit = 10, category, sort } = req.query;
@@ -63,6 +64,23 @@ class ProductController {
       res.status(400).json({ status: false, error });
     }
   }
+  async apiViewUpdate(req, res) {
+    const { id } = req.params;
+    if (id !== undefined) {
+      try {
+        const { view } = await ProductModel.findById(id).select('view');
+        const statusView = await ProductModel.updateOne(
+          { _id: id },
+          { view: parseInt(view + 1) }
+        );
+        res.status(200).json(statusView);
+      } catch (error) {
+        res.status(404).json(error);
+      }
+    }
+  }
+
+  // Admin router
   async adminGetList(req, res) {
     try {
       const { page = 1, limit = 10 } = req.query;
