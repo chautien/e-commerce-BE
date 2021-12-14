@@ -81,6 +81,39 @@ class AuthController {
       return res.status(400).json({ status: false, error });
     }
   }
+  // Admin
+  async userGetList(req, res) {
+    try {
+      const users = await userModel.find().select('-password');
+      return res
+        .status(200)
+        .render('template/user/list', { message: '', users });
+    } catch (error) {
+      return res.status(400).redirect('/');
+    }
+  }
+  async userAuthorize(req, res) {
+    const { id } = req.params;
+    if (id) {
+      try {
+        await userModel.update({ _id: id }, { role: 'admin' });
+        res.status(300).redirect('/user-manager/list');
+      } catch (error) {
+        res.status(300).redirect('/user-manager/list');
+      }
+    }
+  }
+  async userUnAuthorize(req, res) {
+    const { id } = req.params;
+    if (id) {
+      try {
+        await userModel.update({ _id: id }, { role: 'user' });
+        res.status(300).redirect('/user-manager/list');
+      } catch (error) {
+        res.status(300).redirect('/user-manager/list');
+      }
+    }
+  }
 }
 
 module.exports = new AuthController();

@@ -8,6 +8,64 @@
   <title>Document</title>
   <link rel="stylesheet" href="stylesheets/reset.css" />
   <link rel="stylesheet" href="stylesheets/login.css" />
+  <style>
+    .wrapper {
+      height: auto;
+      min-height: 100vh;
+    }
+
+    .login {
+      width: 50rem;
+    }
+
+    .main-login {
+      padding: 4rem;
+    }
+
+    .main-login__title {
+      margin-top: 0;
+      margin-bottom: 1.8rem;
+    }
+
+    .main-login__desc {
+      margin-top: 1rem;
+    }
+
+    .login-form {
+      padding-top: 1.4rem;
+    }
+
+    .form-box {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .form-box-item {
+      position: relative;
+      width: 100%;
+    }
+
+    .login-form__field {
+      margin-bottom: 1rem;
+    }
+
+    .login__btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 1.4rem;
+    }
+
+    .login-form__las-btn {
+      display: block;
+      width: 100%;
+    }
+
+    .login-footer {
+      margin-top: 1.4rem;
+      padding-bottom: 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -16,44 +74,62 @@
     <!-- Login form -->
     <main class="login">
       <section class="main-login">
-        <a href="index.html" class="main-login__homepage"><i class="far fa-drafting-compass"></i></a>
         <h2 class="main-login__title">
-          <span class="main-login__title--mod">Thế giới tech</span>
+          <span class="main-login__title--mod">Đăng ký tài khoản</span>
         </h2>
-        <p class="main-login__desc">
-          Welcome back. Please login <br />
-          to your account.
-        </p>
-        <form action="" method="post" enctype="application/x-www-form-urlencoded" class="login-form">
-          <div class="login-form__field">
-            <p class="login-form__title-area">Email address</p>
-            <input type="text" name="email" class="login-form__area" autofocus required />
+        <form action="/register" method="post" enctype="application/x-www-form-urlencoded" class="login-form">
+          <div class="login-form__field form-box">
+            <div class="form-box-item">
+              <p class="login-form__title-area">First Name</p>
+              <input type="text" name="firstName" class="login-form__area" autocomplete="new-password" autofocus required />
+            </div>
+            <div class="form-box-item">
+              <p class="login-form__title-area">Last Name</p>
+              <input type="text" name="lastName" class="login-form__area" autocomplete="new-password" required />
+            </div>
+          </div>
+          <div class="login-form__field form-box">
+            <div class="form-box-item">
+              <p class="login-form__title-area">Ngày sinh</p>
+              <input type="date" name="dayOfBirth" class="login-form__area" autocomplete="new-password" required />
+            </div>
+            <div class="form-box-item">
+              <p class="login-form__title-area">Giới tính</p>
+              <select name="gender" class="login-form__area" required>
+                <option value="nam">Nam</option>
+                <option value="nữ">Nữ</option>
+              </select>
+            </div>
           </div>
           <div class="login-form__field">
-            <p class="login-form__title-area">Password</p>
-            <input type="password" name="password" class="login-form__area" autofocus required />
+            <p class="login-form__title-area">Email</p>
+            <input type="email" name="email" class="login-form__area" autocomplete="new-password" required />
           </div>
+          <div class="login-form__field">
+            <p class="login-form__title-area">Mật khẩu</p>
+            <input type="password" name="password" class="login-form__area" autocomplete="new-password" required />
+          </div>
+          <div class="login-form__field">
+            <p class="login-form__title-area">Số điện thoại</p>
+            <input type="number" name="phone" class="login-form__area" autocomplete="new-password" required />
+          </div>
+          <div class="login-form__field">
+            <p class="login-form__title-area">Địa chỉ</p>
+            <input type="text" name="address" class="login-form__area" autocomplete="new-password" required />
+          </div>
+
           <% if (message) { %>
           <span class="error-message"><%= message %> </span>
           <% } %>
-          <div class="login-form__raf">
-            <div class="login-form__remember">
-              <input type="checkbox" name="remember" id="remember" class="login-form__remember--checkbox" />
-              <label for="remember" class="login-form__remember--title">Remember me</label>
-            </div>
-            <a href="#" class="login-form__forgot">Forgot password</a>
-          </div>
           <div class="login-form__las-btn">
-            <input type="submit" value="Login" class="btn login__btn" />
-            <a href="#" class="btn signup__btn">Sign up</a>
+            <button type="submit" class="btn login__btn">Đăng ký</button>
           </div>
         </form>
         <footer class="login-footer">
           <p class="login-footer__desc">
-            By signing up, you agree to Aroma's
+            By signing up, you agree to thegioitech
           </p>
-          <a href="#" class="login-footer__tos">Terms and Conditions
-            <span class="login-footer__tos--mod">&</span> Privacy Poticy</a>
+          <a href="/login" class="login-footer__tos">Đã có tài khoản, đăng nhập!</a>
         </footer>
       </section>
     </main>

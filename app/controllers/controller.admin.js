@@ -26,7 +26,7 @@ class AdminController {
     }
   }
   async getRegister(req, res) {
-    res.status(200).render('template/auth/register');
+    res.status(200).render('template/auth/register', { message: '' });
   }
   async login(req, res) {
     try {
@@ -45,7 +45,11 @@ class AdminController {
           message: 'Username hoặc password không đúng!',
         });
       }
-      console.log(password, user.password);
+      if (user.role !== 'admin') {
+        return res.status(400).render('template/auth/login', {
+          message: 'Bạn chưa được cấp quyền!',
+        });
+      }
       if (user && (await bcrypt.compare(password, user.password))) {
         const token = jwt.sign(
           {
@@ -65,7 +69,7 @@ class AdminController {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
           })
-          .redirect('/');
+          .redirect('/visualize');
       }
       return res.status(400).render('template/auth/login', {
         message: 'Username hoặc password không đúng!',
@@ -78,42 +82,56 @@ class AdminController {
   }
   async register(req, res) {
     try {
-      const { firstName, lastName, email, password, role, image } = req.body;
-
-      if (!(firstName && lastName && email && password && role && image)) {
+      const {
+        firstName,
+        lastName,
+        email,
+        password,
+        dayOfBirth,
+        gender,
+        phone,
+        address,
+      } = req.body;
+      if (
+        !(
+          firstName &&
+          lastName &&
+          email &&
+          password &&
+          dayOfBirth &&
+          gender &&
+          phone &&
+          address
+        )
+      ) {
         return res.status(400).json({ message: 'All input is required!' });
       }
       const existUser = await userModel.findOne({ email });
       if (existUser) {
-        return res.status(400).json({ message: 'User email already exist!' });
+        return res.status(400).render('template/auth/register', {
+          message: `Email '${email}' đã tồn tại!`,
+        });
       }
 
-      const encryptedPassword = await bcrypt.hash(password, 10);
-
-      const user = await userModel.create({
+      const encryptedPassword = bcrypt.hashSync(password, 10);
+      const user = new userModel({
         firstName,
         lastName,
         email,
         password: encryptedPassword,
-        role,
-        image,
+        dayOfBirth,
+        gender,
+        phone,
+        address,
+        image: `https://www.gravatar.com/avatar/${encryptedPassword}?s=100&d=identicon&r=PG`,
       });
-      const token = jwt.sign(
-        {
-          user_id: user._id,
-          firstName,
-          lastName,
-          email,
-          role,
-          image,
-        },
-        process.env.TOKEN_KEY,
-        { expiresIn: '2h' }
-      );
-      user.token = token;
-      return res.status(200).json({ status: true, user });
+      await userModel.create(user);
+
+      return res.status(200).redirect('/login');
     } catch (error) {
-      return res.status(400).json({ status: false, error });
+      return res.status(400).render('template/auth/register', {
+        message: `Đã có lỗi xảy ra!`,
+      });
     }
   }
   async logout(req, res) {

@@ -94,8 +94,7 @@ class BrandController {
   }
   async adminPostAdd(req, res) {
     const { name, slug } = req.body;
-    console.log(req.files);
-    return res.json({ a: 'a' });
+
     if (!(name || slug)) {
       res.status(500).render('template/brand/add', {
         message: 'Vui lòng điền tất cả các field!',
@@ -112,6 +111,10 @@ class BrandController {
         name,
         slug,
       });
+      console.log(
+        '🚀 ~ file: controller.brand.js ~ line 118 ~ BrandController ~ adminPostAdd ~ brand',
+        brand
+      );
 
       const status = await brandModel.create(brand);
 

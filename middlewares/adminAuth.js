@@ -8,6 +8,10 @@ const adminAuth = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, config.TOKEN_KEY);
+
+    if (decoded.role !== 'admin') {
+      console.log(false);
+    }
     req.user = decoded;
     next();
   } catch {

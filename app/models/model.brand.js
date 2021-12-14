@@ -3,10 +3,13 @@ const { ObjectId } = Schema.Types;
 
 const brandSchema = new Schema(
   {
-    _id: { type: ObjectId },
     name: String,
     slug: String,
-    image: String,
+    image: {
+      type: String,
+      default:
+        'https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=100&d=identicon&r=PG',
+    },
   },
   { timestamps: { createdAt: 'created_at' }, collection: 'brand' }
 );

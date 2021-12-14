@@ -262,7 +262,6 @@ class ProductController {
       brand,
       discount,
       flashsale,
-      flashsale_end_date,
       name,
       slug,
       specs,
@@ -271,36 +270,40 @@ class ProductController {
       color_option,
       amount,
     } = req.body;
-
+    const { id } = req.params;
+    console.log(
+      '🚀 ~ file: controller.product.js ~ line 274 ~ ProductController ~ adminPutUpdate ~ id',
+      id
+    );
     if (flashsale === 'on') {
       flashsale = true;
     } else {
       flashsale = false;
     }
-    // const option = price_option.reduce((prev, _, index, arr) => {
-    //   if (index % 2 === 0 || index === 0) {
-    //     if (!(arr[index] || arr[index + 1])) {
-    //       return prev;
-    //     }
-    //     const newObj = {
-    //       price: parseInt(arr[index].split(',').join('')),
-    //       value: arr[index + 1],
-    //     };
-    //     return [...prev, newObj];
-    //   }
-    //   return prev;
-    // }, []);
+    const option = price_option.reduce((prev, _, index, arr) => {
+      if (index % 2 === 0 || index === 0) {
+        if (!(arr[index] || arr[index + 1])) {
+          return prev;
+        }
+        const newObj = {
+          price: parseInt(arr[index].split(',').join('')),
+          value: arr[index + 1],
+        };
+        return [...prev, newObj];
+      }
+      return prev;
+    }, []);
 
-    // const color = color_option.reduce((prev, curr) => {
-    //   if (curr) {
-    //     return [...prev, { name: curr }];
-    //   }
-    //   return prev;
-    // }, []);
+    const color = color_option.reduce((prev, curr) => {
+      if (curr) {
+        return [...prev, { name: curr }];
+      }
+      return prev;
+    }, []);
 
-    // const specification = specs.reduce((prev, curr, index, arr) => {
-    //   return [...prev, [SPECS_KEYS[index], curr]];
-    // }, []);
+    const specification = specs.reduce((prev, curr, index, arr) => {
+      return [...prev, [SPECS_KEYS[index], curr]];
+    }, []);
     // const thumbnail =
     //   getS3ResponsenEntity({ ...req.files['thumbnail'][0] }) || null;
     // const banner_image =
@@ -310,20 +313,25 @@ class ProductController {
     //     getS3ResponsenEntity(entity)
     //   ) || null;
 
-    const product = new ProductModel({
+    const product = {
       name,
       discount,
       flash_sale: flashsale,
-      flashsale_end_date: Date.now(),
-
       article: content,
       slug,
       amount,
       category,
       brand,
-    });
-
-    res.json(product);
+      option,
+      color,
+      specification,
+    };
+    try {
+      await ProductModel.update({ _id: id }, product);
+      res.status(200).redirect('/product-manager/list?page=1&limit=10');
+    } catch (error) {
+      res.status(200).redirect('/product-manager/list?page=1&limit=10');
+    }
   }
 }
 

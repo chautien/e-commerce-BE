@@ -5,10 +5,13 @@ const userSchema = new Schema(
     firstName: String,
     lastName: String,
     email: String,
+    phone: Number,
+    address: String,
     password: String,
-    role: String,
+    role: { type: String, default: 'user' },
     image: String,
-    token: String,
+    dayOfBirth: String,
+    gender: String,
   },
   { timestamps: { createdAt: 'created_at' }, collection: 'user' }
 );

@@ -53,7 +53,7 @@
             <div class="card-header">
               <h3 class="card-title text-uppercase">Sửa Sản phẩm</h3>
             </div>
-            <form action="/product-manager/update/1" method="POST" id="product-form" enctype="multipart/form-data">
+            <form action="/product-manager/update/<%= product._id %>" method="POST" id="product-form">
               <div class="card-body">
                 <div class="row">
                   <div class="form-group col-3">
@@ -113,65 +113,7 @@
                     <input type="text" id="slug" name="slug" value="<%= product.slug %>" class="form-control" />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="form-group col-1">
-                    <label for="amount">Số lượng</label>
-                    <input type="number" name="amount" id="amount" value="<%= product.amount %>" min="1" class="form-control">
-                  </div>
-                  <div class="form-group col-5">
-                    <div class="row pl-2 pr-2">
-                      <label for="product-image" class="col-4">Hình ảnh sản phẩm</label>
-                      <div class="col-6 d-flex product-image-box">
-                        <% product.product_image.forEach(entity => { %>
-                        <div class="product-image-item">
-                          <span data-image-id="<%= entity._id %>" class="removeProductImage"><i class="fas fa-times"></i></span>
-                          <img src="<%= entity.location %>">
-                        </div>
-                        <% }) %>
-                      </div>
-                    </div>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" multiple accept="image/*" required name="product-image" id="product-image" class="custom-file-input">
-                        <label class="custom-file-label" for="product-image">Thêm hình ảnh</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group col-3">
-                    <div class="row pl-2 pr-2">
-                      <label for="banner">Ảnh banner</label>
-                      <div class="col-6 d-flex product-image-box">
-                        <div class="product-image-item">
-                          <span data-image-id="<%= product.banner_image._id %>" class="removeProductImage"><i class="fas fa-times"></i></span>
-                          <img src="<%= product.banner_image.location %>">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" name="banner" id="banner" accept="image/*" class="custom-file-input" />
-                        <label for="banner" class="custom-file-label">Thêm hình ảnh</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group col-3">
-                    <div class="row pl-2 pr-2">
-                      <label for="thumbnail">Ảnh thumbnail</label>
-                      <div class="col-6 d-flex product-image-box">
-                        <div class="product-image-item">
-                          <span data-image-id="<%= product.thumbnail._id %>" class="removeProductImage"><i class="fas fa-times"></i></span>
-                          <img src="<%= product.thumbnail.location %>">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" accept="image/*" name="thumbnail" id="thumbnail" class="custom-file-input" />
-                        <label for="thumbnail" class="custom-file-label">Thêm hình ảnh</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
                 <div class="row">
                   <div class="col-12">
                     <label class="card-heading pt-2">Thông số sản phẩm</label>
@@ -255,10 +197,7 @@
                 </div>
                 <div class="form-group">
                   <button type="submit" class="btn btn-primary mr-2">
-                    Thêm sản phẩm
-                  </button>
-                  <button type="reset" class="btn btn-warning">
-                    Nhập lại
+                    Cập nhật
                   </button>
                 </div>
               </div>

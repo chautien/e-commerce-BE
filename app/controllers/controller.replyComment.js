@@ -1,4 +1,4 @@
-const ReplyCommentModel = require('../../models/model.replyComment');
+const ReplyCommentModel = require('../models/model.replyComment');
 
 class ReplyCommentController {
   add = async (req, res) => {
