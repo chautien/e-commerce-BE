@@ -6,9 +6,22 @@ const App = require('./routes/router.index');
 const createError = require('http-errors');
 const database = require('./configs/database.model');
 const nocache = require('nocache');
+res.header('Access-Control-Allow-Origin', '*');
 
 const app = express();
 
+const whitelist = ['http://localhost:3000'];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.set('views', path.join(__dirname, 'views/'));
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'views/template/')));
