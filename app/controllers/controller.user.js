@@ -34,7 +34,7 @@ class AuthController {
           { expiresIn: '2h' }
         );
         user.token = token;
-        return res.status(200).json({ status: true, user });
+        return res.status(200).json({ token });
       }
       res.status(400).json({ status: false, message: 'Invalid Credentials' });
     } catch (error) {
