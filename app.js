@@ -10,17 +10,6 @@ res.header('Access-Control-Allow-Origin', '*');
 
 const app = express();
 
-const whitelist = ['http://localhost:3000'];
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-};
 app.use(cors(corsOptions));
 app.set('views', path.join(__dirname, 'views/'));
 app.set('view engine', 'ejs');
@@ -32,7 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public/')));
 app.use(express.static(path.join(__dirname, 'storage/')));
 app.use(nocache());
-app.all('*', function (req, res, next) {
+app.all('/*', function (req, res, next) {
   res.header('Access-Control-Allow-Headers', '*');
   res.header('Access-Control-Allow-Origin: *');
   res.header(
