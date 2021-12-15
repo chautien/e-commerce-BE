@@ -7,6 +7,7 @@ const BrandModal = require('../models/model.brand');
 const { SPECS_KEYS } = require('../../constant');
 const { slugify } = require('../../utils/slugify');
 const { getS3ResponsenEntity } = require('../../utils/getS3ReponseEntity');
+const qs = require('querystring');
 class ProductController {
   // API route
   async apiGetList(req, res) {
@@ -77,6 +78,17 @@ class ProductController {
       } catch (error) {
         res.status(404).json(error);
       }
+    }
+  }
+  async apiSearch(req, res) {
+    const { q } = req.params;
+    try {
+      const productSearch = await ProductModel.find({
+        name: { $regex: q, $options: 'i' },
+      });
+      res.json(productSearch);
+    } catch (error) {
+      res.status(400).json(error);
     }
   }
 
