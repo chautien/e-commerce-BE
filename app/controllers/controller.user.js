@@ -19,13 +19,29 @@ class AuthController {
           .status(400)
           .json({ status: false, message: 'Email is not existed!' });
       }
-      console.log(password, user.password);
       if (user && (await bcrypt.compare(password, user.password))) {
-        delete user.password;
-        const token = jwt.sign(user, process.env.TOKEN_KEY, {
+        const userSign = {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+          role: user.role,
+          image: user.image,
+          dayOfBirth: user.dayOfBirth,
+          gender: user.gender,
+        };
+        console.log(
+          '🚀 ~ file: controller.user.js ~ line 34 ~ AuthController ~ login ~ userSign',
+          userSign
+        );
+        const token = jwt.sign(userSign, process.env.TOKEN_KEY, {
           expiresIn: '2h',
         });
-        user.token = token;
+        console.log(
+          '🚀 ~ file: controller.user.js ~ line 37 ~ AuthController ~ login ~ token',
+          token
+        );
         return res.status(200).json({ token });
       }
       res.status(400).json({ status: false, message: 'Invalid Credentials' });
