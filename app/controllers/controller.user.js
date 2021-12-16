@@ -21,18 +21,10 @@ class AuthController {
       }
       console.log(password, user.password);
       if (user && (await bcrypt.compare(password, user.password))) {
-        const token = jwt.sign(
-          {
-            user_id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email,
-            role: user.role,
-            image: user.image,
-          },
-          process.env.TOKEN_KEY,
-          { expiresIn: '2h' }
-        );
+        delete user.password;
+        const token = jwt.sign(user, process.env.TOKEN_KEY, {
+          expiresIn: '2h',
+        });
         user.token = token;
         return res.status(200).json({ token });
       }
