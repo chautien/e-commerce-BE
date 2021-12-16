@@ -17,7 +17,20 @@ class CommentController {
   detail = async (req, res) => {
     try {
       const { id: productId } = req.params;
-      const productComment = await commentModel.find({ product: productId });
+      const productComment = await commentModel
+        .find({ product: productId })
+        .populate([
+          { path: 'product', select: 'name' },
+          { path: 'user', select: 'firstName lastName email image role' },
+          {
+            path: 'replyComment',
+            populate: [
+              {
+                path: 'user',
+              },
+            ],
+          },
+        ]);
       res.status(200).json({ message: true, productComment });
     } catch (error) {
       res.status(502).json({ status: false, error });
