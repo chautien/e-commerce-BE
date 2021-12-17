@@ -91,6 +91,21 @@ class ProductController {
       res.status(400).json(error);
     }
   }
+  async apiFilter(req, res) {
+    try {
+      const query = req.query;
+      if (query.sort !== undefined) {
+        const product = await ProductModel.find({
+          category: query.category,
+        }).sort(query.sort);
+        return res.status(200).json(product);
+      }
+      const product = await ProductModel.find(query);
+      return res.status(200).json(product);
+    } catch (error) {
+      return res.status(400).json(error);
+    }
+  }
 
   // Admin router
   async adminGetList(req, res) {

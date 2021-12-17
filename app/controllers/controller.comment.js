@@ -31,11 +31,25 @@ class CommentController {
             ],
           },
         ]);
-      res.status(200).json({ message: true, productComment });
+      res.status(200).json({ productComment });
     } catch (error) {
       res.status(502).json({ status: false, error });
     }
   };
+
+  async add(req, res) {
+    const { user, content, product } = req.body;
+    try {
+      const commentRes = commentModel.create({
+        user,
+        content,
+        product,
+      });
+      res.status(200).json(commentRes);
+    } catch (error) {
+      res.status(400).json(error);
+    }
+  }
 
   async adminGetList(req, res) {
     try {
