@@ -23,6 +23,7 @@ const initialApp = (app) => {
   app.use('/api/category', categoryRouter);
   // Comment route
   app.use('/api/comment', commentRouter);
+  app.use('/api/order', orderRouter);
 
   // *** Admin Route ***
   app.use('/', adminRootRouter);
@@ -43,7 +44,6 @@ const initialApp = (app) => {
   app.use('/visualize', adminAuth, visualizeRouter);
   app.use('/comment-manager', adminAuth, adminCommentRouter);
   // Dashboard Order
-  app.use('/api/order', adminAuth, orderRouter);
   app.use('/order', adminAuth, orderAdminRouter);
 };
 
