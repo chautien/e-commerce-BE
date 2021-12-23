@@ -39,12 +39,17 @@ class CommentController {
 
   async add(req, res) {
     const { user, content, product } = req.body;
+
     try {
-      const commentRes = commentModel.create({
+      const commentRes = await commentModel.create({
         user,
         content,
         product,
       });
+      console.log(
+        '🚀 ~ file: controller.comment.js ~ line 48 ~ CommentController ~ add ~ commentRes',
+        commentRes
+      );
       res.status(200).json(commentRes);
     } catch (error) {
       res.status(400).json(error);

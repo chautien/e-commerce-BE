@@ -21,6 +21,7 @@ class AuthController {
       }
       if (user && (await bcrypt.compare(password, user.password))) {
         const userSign = {
+          _id: user._id,
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
